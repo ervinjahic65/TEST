@@ -1,0 +1,316 @@
+<ng-container *ngIf="currentUser | async as user">
+    <header class="navbar container">
+        <section class="navbar-section">
+            <a routerLink="/dashboard" class="navbar-brand mr-2">Habultron - App</a>
+        </section>
+        <div class="dropdown">
+            <a href="#" (click)="logOut()">Izloguj se</a>
+            
+        <ul class="menu">
+            <li class="menu-item">
+                <div class="tile tile-centered">
+                    <div class="tile-content"></div>
+                    <div class="tile-content">{{ user.first_name }}  {{ user.last_name }}</div>
+                </div>
+            </li>
+
+            <li class="divider"></li>
+
+            <li class="menu-item">
+                <a href="#" (click)="logOut()">Izloguj se</a>
+            </li>
+        </ul>
+
+        </div>
+    </header>
+
+    <div class="hero hero-sm bg-primary">
+        <div class="hero-body">
+            <div class="container">
+                <div class="columns">
+                    <div class="column">
+                            <h1>Panel</h1>   
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container my-2">
+        <div class="columns">
+            <div class="column mb-2" *ngIf="tab !== 'addnewuser'">
+                <div class="panel" *ngIf="selectedUser | async as selUser">
+                    <div class="panel-header text-center">
+                        <div class="panel-title h5 mt-10">{{ selUser.first_name }} {{ selUser.last_name }}</div>
+                        <div class="panel-subtitle">{{ selUser.username }}</div>
+                    </div>
+                    <nav class="panel-nav">
+                        <ul class="tab tab-block">
+                            <li class="tab-item c-hand" [class.active]="tab === 'profile'">
+                                <a (click)="tab = 'profile'">Profil</a>
+                            </li>
+                            <li class="tab-item c-hand" [class.active]="tab === 'edit'">
+                                <a (click)="tab = 'edit'">Edit</a>
+                            </li>
+                            <li class="tab-item c-hand" [class.active]="tab === 'edit-password'">
+                                <a (click)="tab = 'edit-password'">Lozinka</a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <ng-container *ngIf="tab === 'profile'">
+                        <div class="panel-body my-2">
+
+                            <div class="tile tile-centered">
+                                <div class="tile-content">
+                                    <div class="tile-title text-bold">E-mail</div>
+                                    <div class="tile-subtitle">{{ selUser.email }}</div>
+                                </div>
+                            </div>
+
+                            <div class="tile tile-centered">
+                                <div class="tile-content">
+                                    <div class="tile-title text-bold">Adresa:</div>
+                                    <div class="tile-subtitle">{{ selUser.address }}</div>
+                                </div>
+                            </div>
+
+                            <div class="tile tile-centered">
+                                <div class="tile-content">
+                                    <div class="tile-title text-bold">Grad</div>
+                                    <div class="tile-subtitle">{{ selUser.city }}</div>
+                                </div>
+                            </div>
+
+                            <div class="tile tile-centered">
+                                <div class="tile-content">
+                                    <div class="tile-title text-bold">Poštanski broj:</div>
+                                    <div class="tile-subtitle">{{ selUser.postcode }}</div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="tab === 'edit' && editUserForm">
+                        <div class="panel-body mt-2">
+                            <form [formGroup]="editUserForm">
+
+                                <div class="form-group">
+                                    <label class="form-label" for="username">Korisničko ime</label>
+                                    <input type="text" id="username" class="form-input" formControlName="username" [disabled]="true">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="first-name">Ime</label>
+                                    <input type="text" id="first-name" class="form-input" formControlName="first_name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="last-name">Prezime</label>
+                                    <input type="text" id="last-name" class="form-input" formControlName="last_name">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="email">Email</label>
+                                    <input class="form-input" type="email" id="email" formControlName="email">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="address">Adresa</label>
+                                    <input type="text" id="address" class="form-input" formControlName="address">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="postcode">Poštanski broj</label>
+                                    <input type="text" id="postcode" class="form-input" formControlName="postcode">
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="last-name">Grad</label>
+                                    <input type="text" id="city" class="form-input" formControlName="city">
+                                </div>
+
+                            </form>
+                        </div>
+
+                        <div class="panel-footer">
+                            <button class="btn btn-primary btn-block" (click)="update(editUserForm, selUser.id)">
+                                Spasi
+                            </button>
+                        </div>
+
+                    </ng-container>
+
+                    <ng-container *ngIf="tab === 'edit-password'">
+                        <div class="panel-body mt-2">
+                            <form [formGroup]="editPasswordForm">
+
+                                <div class="form-group mb-2">
+                                    <label class="form-label" for="password">Stara lozinka</label>
+                                    <input type="password" id="password" class="form-input" formControlName="password">
+                                </div>
+
+                                <div class="divider text-center" data-content="Promijeni lozinku"></div>
+                                <div class="form-group mt-2">
+                                    <label class="form-label" for="password">Nova lozinka</label>
+                                    <input type="password" id="password-new" class="form-input" formControlName="passwordNew">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="password">Potvrda nove lozinke</label>
+                                    <input type="password" id="password-confirm" class="form-input" formControlName="passwordConfirm">
+                                </div>
+
+                            </form>
+                        </div>
+
+                        <div class="panel-footer">
+                            <button class="btn btn-primary btn-block" (click)="updatePassword(editPasswordForm, selUser.id)"> 
+                                Spasi
+                            </button>
+                        </div>
+
+                    </ng-container>
+
+                </div>
+            </div>
+
+        
+            <div class="column" *ngIf="tab === 'addnewuser'">
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <div class="panel-title h6">Dodaj novog korisnika</div>
+                    </div>
+
+                    <div class="panel-body py-2">
+                        <form [formGroup]="addNewUserForm">
+
+                            <div class="form-group">
+                                <label class="form-label" for="username">Korisničko ime</label>
+                                <input type="text" id="username" class="form-input" formControlName="username">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="password">Lozinka</label>
+                                <input type="password" id="password" class="form-input" formControlName="password">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="password-confirm">Potvrdi lozinku</label>
+                                <input type="password" id="password-confirm" class="form-input" formControlName="passwordConfirm">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="first-name">Ime</label>
+                                <input type="text" id="first-name" class="form-input" formControlName="first_name">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="last-name">Prezime</label>
+                                <input type="text" id="last-name" class="form-input" formControlName="last_name">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="email">Email</label>
+                                <input class="form-input" type="email" id="email" formControlName="email">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="address">Adresa</label>
+                                <input type="text" id="address" class="form-input" formControlName="address">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="postcode">Poštanski broj</label>
+                                <input type="text" id="postcode" class="form-input" formControlName="postcode">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label" for="last-name">Grad</label>
+                                <input type="text" id="city" class="form-input" formControlName="city">
+                            </div>
+
+                        </form>
+                    </div>
+
+                    <div class="panel-footer">
+                        <button class="btn btn-primary btn-block" (click)="add(addNewUserForm)">
+                            Dodaj korisnika
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        
+
+            <div class="column">
+                <button class="btn btn-primary btn-block mb-2" (click)="tab = 'addnewuser'">
+                    Dodaj korisnike
+                </button>
+
+                <div class="panel">
+
+                    <div class="panel-header">
+                        <div class="panel-title h6">Korisnici</div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="tile" *ngFor="let item of users | async">
+                            <div class="tile-content mb-2">
+                                <p class="tile-title text-bold">
+                                    {{ item.first_name }} {{ item.last_name }}
+                                </p>
+                                <p class="tile-subtitle">
+                                    {{ item.email }}
+                                </p>
+                            </div>
+                            <div class="tile-action">
+                                <button class="btn btn-link btn-action btn-lg tooltip-left"
+                                    data-tooltip="Edit user" (click)="selectUser(item)">
+                                    Edit
+                                </button>
+
+                                    <!--Iz nekog razloga se ne vidi delete button -->
+                                <button class="btn btn-link btn-action btn-lg tooltip tooltip-left"
+                                    data-tooltip="Delete User" (click)="toggleWarning(item.id)">
+                                    X Izbriši<i class="icon icon-cross"></i>
+                                </button><i class="icon icon-cross"></i>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="modal modal-sm" [class.active]="this.showWarningModal">
+        <a (click)="toggleWarning()" class="modal-overlay" aria-label="Close"></a>
+
+        <div class="modal-container" role="document">
+            <div class="modal-header">
+                <a class="btn btn-clear float-right" (click)="toggleWarning()" aria-label="Close"></a>
+                <div class="modal-title h5">Potvrdi</div>
+            </div>
+
+            <div class="modal-body">
+                <div class="content">
+                    <p>
+                        Da li želite da izbrišete korisnika?
+                    </p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn mr-2" (click)="toggleWarning()">Zatvori</button>
+
+                <button class="btn btn-primary" (click)="delete()">Potvrdi</button>
+            </div>
+        </div>
+
+    </div>
+
+</ng-container>

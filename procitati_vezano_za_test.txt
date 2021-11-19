@@ -1,0 +1,8 @@
+-Kad se user loguje iz nekog razloga treba refresati page, vjerovatno
+ api zeza nesto kako sam pravio
+pristupni podaci iz baze su username: ervin123, password: 1234567
+
+
+- Treba instalirati ngx-toastr da se moze koristiti u app.module
+ i treba instalirati spectre min.css i importovati 
+u style.scss

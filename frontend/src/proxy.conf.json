@@ -1,0 +1,27 @@
+{
+    "/api/*": {
+
+        "target": "http://localhost",
+        "secure": false
+    },
+    "/orders/*": {
+        "target": "http://localhost",
+        "secure": false,
+        "changeOrigin": true
+    },
+    "/uploads/*": {
+        "target": "http://localhost",
+        "secure": false,
+        "changeOrigin": true
+    },
+    "/pdf/*": {
+        "target": "http://localhost",
+        "secure": false,
+        "changeOrigin": true
+    },
+    "/file/*": {
+        "target": "http://localhost",
+        "secure": false,
+        "changeOrigin": true
+    }
+}
